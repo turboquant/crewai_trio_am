@@ -1,0 +1,14 @@
+wallet,entity,type,confidence,source
+0xabc,C123_customer,self-custody,0.9,withdraw ticket #L4
+0xdef,C789_customer,self-custody,0.85,withdraw ticket #L7
+0xghi,C456_customer,self-custody,0.9,withdraw ticket #L10
+0xrelay1,UnknownRelay1,mixer,0.6,heuristic analysis
+0xprime,PrimeBrokerX,otc_desk,0.6,heuristic path length=2
+0xbridge_1,BridgeProtocol,bridge,0.8,known bridge contract
+0xfinal_eth,UnknownEntity1,unknown,0.3,terminal address
+0xmixer_1,TornadoCash,mixer,0.9,known mixer protocol
+0xcold_storage,InstitutionalCustody,custody,0.7,heuristic large balance
+0xinstitutional,PrimeInstitutional,institutional,0.8,known institutional wallet
+exch_hot_1,ExchangeHotWallet1,internal,1.0,ops inventory
+exch_hot_2,ExchangeHotWallet2,internal,1.0,ops inventory
+

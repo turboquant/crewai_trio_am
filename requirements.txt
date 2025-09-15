@@ -1,0 +1,12 @@
+crewai>=0.51
+fastapi>=0.111
+uvicorn[standard]>=0.30
+chromadb>=0.5
+sentence-transformers>=3.0
+duckdb>=1.0
+pandas>=2.2
+networkx>=3.3
+pydantic>=2.8
+python-dotenv>=1.0
+PyYAML>=6.0
+

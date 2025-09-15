@@ -1,0 +1,12 @@
+tx_id,timestamp,customer_id,asset,amount,side,notes
+L1,2022-10-01T12:00:00Z,C123,USD,5000,credit,fiat deposit
+L2,2022-10-02T09:00:00Z,C123,BTC,0.25,credit,buy spot
+L3,2022-10-15T11:00:00Z,C789,ETH,5,credit,external deposit tag x1
+L4,2022-11-08T16:00:00Z,C123,BTC,0.05,debit,withdraw to 0xabc
+L5,2022-10-05T14:30:00Z,C456,USD,10000,credit,fiat deposit
+L6,2022-10-06T10:15:00Z,C456,ETH,2.5,credit,buy spot
+L7,2022-11-10T09:45:00Z,C789,ETH,1.2,debit,withdraw to 0xdef
+L8,2022-10-20T16:20:00Z,C123,USD,1500,credit,fiat deposit
+L9,2022-11-01T11:30:00Z,C456,BTC,0.1,credit,buy spot
+L10,2022-11-15T13:15:00Z,C456,BTC,0.05,debit,withdraw to 0xghi
+

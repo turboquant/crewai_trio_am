@@ -1,0 +1,26 @@
+bankruptcy_basics:
+  sections:
+    asset_segregation: "Asset Segregation Requirements"
+    tracing_methodology: "Tracing Methodology"  
+    documentation_standards: "Documentation Standards"
+    claims_process: "Claims Process"
+
+drafting_boilerplate:
+  sections:
+    background_template: "Background Section Template"
+    methodology_template: "Methodology Section Template"
+    citation_standards: "Citation Format Standards"
+    disclaimers: "Standard Disclaimers"
+    appendix_templates: "Appendix Templates"
+
+data_files:
+  ledgers:
+    spot_ledger: "ledgers/spot_ledger.csv"
+    margin_ledger: "ledgers/margin_ledger.csv"
+  blockchain:
+    transactions: "mock_chain/tx.csv"
+  claims:
+    customer_claims: "claims/claims.csv"
+  entities:
+    wallet_mapping: "entities/xref_wallets.csv"
+

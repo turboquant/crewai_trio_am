@@ -1,0 +1,12 @@
+tx_hash,timestamp,from,to,asset,amount,fee,notes
+T1,2022-11-08T16:05:00Z,exch_hot_1,0xabc,BTC,0.05,0.0001,customer C123 withdraw
+T2,2022-11-09T08:00:00Z,0xabc,0xrelay1,BTC,0.0499,0.00005,peel chain
+T3,2022-11-09T09:30:00Z,0xrelay1,0xprime,BTC,0.0498,0.00004,consolidation
+T4,2022-11-10T10:15:00Z,exch_hot_2,0xdef,ETH,1.2,0.001,customer C789 withdraw
+T5,2022-11-10T12:30:00Z,0xdef,0xbridge_1,ETH,1.199,0.0008,bridge to BSC
+T6,2022-11-10T12:45:00Z,0xbridge_1,0xfinal_eth,ETH,1.1982,0.0006,final destination
+T7,2022-11-15T13:20:00Z,exch_hot_1,0xghi,BTC,0.05,0.0001,customer C456 withdraw
+T8,2022-11-15T15:45:00Z,0xghi,0xmixer_1,BTC,0.0499,0.00005,privacy mixer
+T9,2022-11-15T16:00:00Z,0xmixer_1,0xcold_storage,BTC,0.0498,0.00004,cold storage
+T10,2022-11-20T11:30:00Z,0xprime,0xinstitutional,BTC,0.0450,0.00005,institutional transfer
+

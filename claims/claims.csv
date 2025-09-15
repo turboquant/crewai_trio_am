@@ -1,0 +1,11 @@
+claim_id,customer_id,asserted_asset,asserted_amount,priority,status,notes
+CLM-1001,C123,BTC,0.25,general,unreconciled,"Customer asserts 0.25 BTC balance"
+CLM-1002,C123,USD,6500,general,unreconciled,"Customer asserts $6500 USD balance"
+CLM-2001,C789,ETH,5,general,unreconciled,"Customer asserts 5 ETH, no KYC docs"
+CLM-2002,C789,USD,500,general,unreconciled,"Customer asserts $500 USD balance"
+CLM-3001,C456,USD,10000,general,unreconciled,"Customer asserts $10000 USD balance"
+CLM-3002,C456,ETH,2.5,general,unreconciled,"Customer asserts 2.5 ETH balance"
+CLM-3003,C456,BTC,0.1,general,unreconciled,"Customer asserts 0.1 BTC balance"
+CLM-4001,C999,BTC,1.5,general,unreconciled,"Disputed claim - insufficient documentation"
+CLM-4002,C888,ETH,10,priority,unreconciled,"Priority claim - institutional client"
+

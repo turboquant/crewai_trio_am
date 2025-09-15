@@ -1,0 +1,8 @@
+tx_id,timestamp,customer_id,asset,amount,side,position_id,notes
+M1,2022-10-03T10:30:00Z,C123,BTC,0.5,credit,POS_001,margin long position
+M2,2022-10-10T15:45:00Z,C789,ETH,2.0,credit,POS_002,margin long position
+M3,2022-10-25T09:20:00Z,C123,USD,2500,debit,POS_001,margin call coverage
+M4,2022-11-05T11:15:00Z,C456,BTC,0.3,credit,POS_003,margin short position
+M5,2022-11-12T14:00:00Z,C789,ETH,0.8,debit,POS_002,partial position close
+M6,2022-11-18T16:45:00Z,C123,BTC,0.2,debit,POS_001,partial position close
+
