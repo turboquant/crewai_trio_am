@@ -171,20 +171,6 @@ See `QUICKSTART.md` for detailed command reference.
 
 ---
 
-### 📊 **Performance Metrics**
-
-#### **Accuracy Standards**
-- ✅ **Asset Tracing**: 95%+ precision on known test cases
-- ✅ **Reconciliation**: ±0.0001 unit tolerance for discrepancies  
-- ✅ **Citation Coverage**: 80%+ of factual claims include source references
-
-#### **Operational Efficiency**  
-- ⚡ **Processing Speed**: Complete workflow in <5 minutes
-- 🔄 **Scalability**: Handles 10,000+ transactions per analysis
-- 📈 **Throughput**: Multiple concurrent case processing
-
----
-
 ### 🛡️ **Security & Compliance**
 
 #### **Data Protection**
