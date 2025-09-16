@@ -1,4 +1,4 @@
-# 🏛️ CrewAI Compliance Experts
+# 🏛️ Compliance Analysis
 ## Multi-Agent Crypto Bankruptcy Assistant
 
 *Crafted for **Alvarez & Marsal** by **TurboQuant***
