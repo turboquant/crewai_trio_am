@@ -9,7 +9,7 @@
 
 A sophisticated multi-agent AI system designed specifically for cryptocurrency bankruptcy proceedings and regulatory compliance work. Built using CrewAI orchestration, this solution mimics an entire compliance department's workflow through specialized AI agents that collaborate to assess, trace, and document complex financial scenarios.
 
-**Perfect for FTX-like crypto bankruptcies, regulatory investigations, and asset recovery operations.**
+**Perfect for complex and dense crypto bankruptcies, regulatory investigations, and asset recovery operations.**
 
 ---
 
@@ -89,30 +89,38 @@ graph TB
 - 8GB+ RAM (for local LLM)
 
 #### **Setup**
+**🚀 Automated Setup (Recommended):**
 ```bash
-# 1. Clone and setup environment
-git clone <repository-url>
-cd crypto-bankruptcy-assistant
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
+# 1. Clone repository
+git clone https://github.com/turboquant/crewai_trio_am.git
+cd crewai_trio_am
 
-# 2. Start services (Ollama + API)
-docker compose up -d
-
-# 3. Ingest knowledge base
-docker compose exec api python src/ingest.py
-
-# 4. Run demo analysis
-curl -X POST localhost:8000/run \
-  -H "Content-Type: application/json" \
-  -d '{"topic":"Crypto estate tracing & distribution","targets":["C123","0xabc"]}'
+# 2. Run setup script
+./setup.sh        # Linux/Mac
+# OR
+setup.bat         # Windows
 ```
 
-#### **Outputs**
-- `tracing_report.md` - Asset flow analysis with transaction evidence
-- `claims_recon.csv` - Reconciliation results with deltas
-- `Draft_Exhibit_A.md` - Court-ready legal documentation
-- `audit.db` - Complete execution audit trail
+**🔧 Manual Setup:**
+```bash
+# 1. Install dependencies
+pip install -r requirements_real.txt
+
+# 2. Start Docker containers
+docker compose -f docker-compose.real.yml up -d
+
+# 3. Launch interactive chat
+python interactive_demo.py
+```
+
+#### **💬 Usage**
+Interactive AI-powered compliance analysis:
+- **Direct Commands**: `/balance C123 BTC`, `/claims`, `/wallet 0xabc`, `/assets`
+- **Natural Language**: *"How much BTC does customer C123 have?"*, *"Show unreconciled claims"*
+- **System Tools**: `/test` (health check), `/help` (commands), `/search` (knowledge base)
+- **Complete Analysis**: Real-time asset tracing, claims reconciliation, legal research
+
+See `QUICKSTART.md` for detailed command reference.
 
 ---
 
@@ -218,7 +226,7 @@ This system was developed specifically for **Alvarez & Marsal's** restructuring 
 - **Training**: Custom training sessions available for A&M teams
 
 #### **Business Inquiries**
-- **TurboQuant Consulting**: [Contact for custom implementations]
+- **TurboQuant Consulting**: [carlos@turboquant.ai]
 - **Feature Requests**: Priority development for A&M use cases
 - **Integration Support**: Professional services for enterprise deployment
 
@@ -234,4 +242,4 @@ This system was developed specifically for **Alvarez & Marsal's** restructuring 
 
 *Built with ❤️ by **TurboQuant** for **Alvarez & Marsal***
 
-**Version**: 1.0.0 | **Last Updated**: September 2024
+**Version**: 1.0.1 | **Last Updated**: September 2025

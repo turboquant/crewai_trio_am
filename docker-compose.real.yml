@@ -1,0 +1,103 @@
+# Docker Compose for Real CrewAI - Production Ready
+# Avoids Windows DLL issues by running in containerized Linux environment
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: crewai-ollama
+    ports: 
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    entrypoint: >
+      /bin/sh -c "
+      ollama serve & 
+      echo 'Waiting for Ollama server to start...' &&
+      sleep 5 &&
+      echo 'Ollama server started, pulling models...' &&
+      ollama pull llama3.1:8b &&
+      echo 'Models downloaded successfully' &&
+      tail -f /dev/null
+      "
+    networks:
+      - crewai-net
+
+  crewai-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.crewai
+    container_name: crewai-compliance
+    working_dir: /app
+    environment:
+      - LLM_PROVIDER=ollama
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - OLLAMA_MODEL=llama3.1:8b
+      - OPENAI_API_KEY=sk-dummy-key-for-ollama-bypass-not-used
+      - CHROMA_DIR=/app/.chroma
+      - PYTHONPATH=/app
+    volumes:
+      - ./:/app
+      - chroma_data:/app/.chroma
+      - audit_data:/app/audit
+    depends_on:
+      ollama:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    networks:
+      - crewai-net
+    command: >
+      /bin/bash -c "
+      echo 'Installing CrewAI dependencies...' &&
+      python3 -m pip install --no-cache-dir -r requirements_real.txt &&
+      echo 'Testing CrewAI setup...' &&
+      python3 test_crewai_docker.py || true &&
+      echo 'CrewAI container ready for commands...' &&
+      tail -f /dev/null
+      "
+    stdin_open: true
+    tty: true
+
+  api-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.crewai
+    container_name: crewai-api
+    working_dir: /app
+    environment:
+      - LLM_PROVIDER=ollama
+      - OLLAMA_BASE_URL=http://ollama:11434  
+      - OLLAMA_MODEL=llama3.1:8b
+      - CHROMA_DIR=/app/.chroma
+      - PYTHONPATH=/app
+    volumes:
+      - ./:/app
+      - chroma_data:/app/.chroma
+      - audit_data:/app/audit
+    depends_on:
+      ollama:
+        condition: service_healthy
+    ports:
+      - "8001:8000"
+    networks:
+      - crewai-net
+    command: >
+      /bin/bash -c "
+      python3 -m pip install --no-cache-dir -r requirements_real.txt &&
+      python3 -m uvicorn src.api:app --host 0.0.0.0 --port 8000 --reload
+      "
+
+volumes:
+  ollama_data:
+  chroma_data:
+  audit_data:
+
+networks:
+  crewai-net:
+    driver: bridge

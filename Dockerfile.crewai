@@ -1,0 +1,109 @@
+# Dockerfile for Real CrewAI Implementation
+# Uses Ubuntu base to avoid Windows DLL issues
+
+FROM ubuntu:22.04
+
+# Set environment variables
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    python3-dev \
+    python3-venv \
+    curl \
+    wget \
+    git \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create symlinks for python and pip (force overwrite if exists)
+RUN ln -sf /usr/bin/python3 /usr/bin/python && \
+    ln -sf /usr/bin/pip3 /usr/bin/pip || true
+
+# Upgrade pip using python3 directly to avoid symlink issues
+RUN python3 -m pip install --upgrade pip setuptools wheel
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements first for better caching
+COPY requirements_real.txt .
+COPY requirements.txt .
+
+# Install Python dependencies using python3 -m pip for reliability
+# Install CrewAI dependencies in a specific order to avoid conflicts
+RUN python3 -m pip install --no-cache-dir \
+    numpy==1.26.4 \
+    pandas==2.2.3 \
+    pydantic==2.10.6 \
+    fastapi==0.115.12 \
+    uvicorn==0.34.0
+
+# Install CrewAI and LangChain dependencies
+RUN python3 -m pip install --no-cache-dir \
+    langchain-core==0.3.76 \
+    langchain-ollama==0.3.8 \
+    langchain-community==0.3.29
+
+# Install CrewAI with specific versions to avoid conflicts
+RUN python3 -m pip install --no-cache-dir \
+    crewai[tools]==0.186.1
+
+# Install remaining dependencies with compatible versions
+RUN python3 -m pip install --no-cache-dir \
+    sentence-transformers==3.0.1 \
+    chromadb==0.5.23 \
+    duckdb==1.0.0 \
+    networkx==3.4.2 \
+    python-dotenv==1.1.1 \
+    PyYAML==6.0.1
+
+# Create necessary directories
+RUN mkdir -p /app/.chroma /app/audit /app/logs
+
+# Set proper permissions
+RUN chmod 755 /app
+
+# Expose port for API
+EXPOSE 8000
+
+# Copy application code
+COPY . .
+
+# Create a test script specifically for Docker
+RUN echo '#!/usr/bin/env python3\n\
+import os\n\
+import sys\n\
+print("🐳 Docker CrewAI Test")\n\
+print("=" * 50)\n\
+\n\
+# Test basic imports\n\
+try:\n\
+    from crewai import Agent, Task, Crew\n\
+    from langchain_ollama import ChatOllama\n\
+    print("✅ CrewAI imports successful")\n\
+except Exception as e:\n\
+    print(f"❌ Import failed: {e}")\n\
+    sys.exit(1)\n\
+\n\
+# Test Ollama connection\n\
+try:\n\
+    llm = ChatOllama(\n\
+        model="llama3.1:8b",\n\
+        base_url="http://ollama:11434",\n\
+        temperature=0.1\n\
+    )\n\
+    print("✅ Ollama LLM initialized")\n\
+except Exception as e:\n\
+    print(f"❌ Ollama connection failed: {e}")\n\
+\n\
+print("🎉 Docker CrewAI setup successful!")\n' > test_crewai_docker.py
+
+RUN chmod +x test_crewai_docker.py
+
+# Default command
+CMD ["/bin/bash"]

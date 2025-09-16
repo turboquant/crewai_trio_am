@@ -1,0 +1,175 @@
+asset_tracing_task:
+  description: >
+    Build an evidence-backed tracing narrative for target customers/wallets.
+    Identify: origin balances (off-chain), on-chain transfers, intermediaries,
+    and current location, with citations to ledgers/tx and knowledge docs.
+    
+    Specific requirements:
+    - Start with ledger withdrawal records to identify blockchain addresses
+    - Use graph analysis to trace multi-hop transaction flows  
+    - Resolve wallet addresses to entities using cross-reference data
+    - Calculate fee impacts and timing analysis across hops
+    - Identify final destinations and potential recovery opportunities
+    - Cite every transaction hash, ledger ID, and confidence score
+    
+    Target customers: {target_customers}
+    Target wallets: {target_wallets}
+  
+  expected_output: >
+    A comprehensive tracing report in Markdown format containing:
+    - Executive summary with key findings (3-5 bullets)
+    - Complete transaction flow table with all hops
+    - Detailed narrative connecting on-chain and off-chain evidence
+    - Entity resolution results with confidence assessments
+    - Residual uncertainties and investigative recommendations
+    - All findings must include specific citations to source data
+  
+  agent: asset_tracing_agent
+  context: []
+  output_file: "tracing_report.md"
+  
+  # Task-specific parameters
+  max_hops: 5
+  min_confidence_threshold: 0.3
+  include_fee_analysis: true
+  require_entity_resolution: true
+
+claims_reconciliation_task:
+  description: >
+    For each open claim, compute reconciled amount vs asserted, list evidentiary
+    references (ledger tx IDs, chain tx hashes), and flag discrepancies/risks.
+    
+    Specific requirements:
+    - Retrieve all unreconciled claims from the claims repository
+    - For each claim, calculate actual balance from ledger movements
+    - Cross-reference with asset tracing results where available
+    - Identify and quantify any discrepancies with detailed rationale
+    - Account for transaction fees, timing differences, and data limitations  
+    - Provide specific evidence references for all calculations
+    - Recommend claim status updates where appropriate
+    
+    Use traced asset flows from the asset tracing task to inform reconciliation
+    where customer assets have moved on-chain.
+  
+  expected_output: >
+    A reconciliation package containing:
+    - Reconciliation methodology and data source summary
+    - Detailed reconciliation table in CSV format with evidence references
+    - Per-claim analysis memo explaining significant discrepancies  
+    - Summary statistics and overall reconciliation metrics
+    - Recommended status updates for claims requiring action
+    - Complete audit trail linking claims to supporting evidence
+  
+  agent: claims_reconciliation_agent
+  context: ["asset_tracing_task"]  # Depends on tracing results
+  output_file: "claims_reconciliation.md"
+  
+  # Task-specific parameters
+  tolerance_threshold: 0.0001  # Flag discrepancies >= 0.0001 units
+  require_evidence_refs: true
+  include_fee_adjustments: true
+  reconciliation_date: "2024-09-15"
+
+legal_documentation_task:
+  description: >
+    Draft "Draft_Exhibit_A.md" that integrates tracing + reconciliation findings,
+    includes citations (section anchors) and an appendix of evidence tables.
+    
+    Specific requirements:
+    - Synthesize findings from asset tracing and claims reconciliation tasks
+    - Structure as formal expert report suitable for court submission
+    - Include comprehensive methodology section explaining analytical approach
+    - Present factual findings with neutral, professional language
+    - Provide detailed appendices with supporting data tables
+    - Ensure all factual assertions include proper citations
+    - Highlight limitations and uncertainties explicitly
+    - Format for legal review and potential court filing
+    
+    Integrate data from previous tasks while maintaining independence and objectivity.
+  
+  expected_output: >
+    A court-ready expert report draft containing:
+    - Background section establishing context and scope
+    - Comprehensive methodology explaining tools and data sources
+    - Factual findings organized by topic with full citations
+    - Explicit discussion of analytical limitations and uncertainties
+    - Appendix A: Complete transaction flow analysis with supporting tables
+    - Appendix B: Detailed claims reconciliation summary with evidence
+    - Professional formatting suitable for legal proceedings
+  
+  agent: legal_documentation_agent
+  context: ["asset_tracing_task", "claims_reconciliation_task"]  # Depends on both
+  output_file: "Draft_Exhibit_A.md"
+  
+  # Task-specific parameters
+  citation_style: "legal"
+  include_disclaimers: true
+  format_for_court: true
+  max_appendix_tables: 10
+
+# Task execution configuration  
+task_config:
+  # Sequential execution order
+  execution_order:
+    - asset_tracing_task
+    - claims_reconciliation_task  
+    - legal_documentation_task
+  
+  # Task dependencies (automatically handled by context)
+  dependencies:
+    claims_reconciliation_task: ["asset_tracing_task"]
+    legal_documentation_task: ["asset_tracing_task", "claims_reconciliation_task"]
+  
+  # Global task parameters
+  async_execution: false  # Run tasks sequentially for dependencies
+  save_intermediate_outputs: true
+  validate_outputs: true
+  
+  # Retry configuration
+  max_retries: 2
+  retry_delay_seconds: 30
+  
+  # Output validation rules
+  output_validation:
+    require_citations: true
+    min_word_count: 500
+    max_word_count: 10000
+    required_sections:
+      asset_tracing_task: ["Executive Summary", "Flow Analysis", "Detailed Narrative"]
+      claims_reconciliation_task: ["Methodology", "Reconciliation Results", "Summary Statistics"]
+      legal_documentation_task: ["Background", "Methodology", "Findings", "Appendix A", "Appendix B"]
+  
+  # Logging and audit
+  log_all_outputs: true
+  save_tool_interactions: true
+  track_execution_time: true
+  generate_audit_report: true
+
+# Template substitution parameters
+template_params:
+  case_name: "Crypto Exchange Bankruptcy Estate"
+  analysis_date: "2024-09-15"
+  analyst_name: "AI Compliance Expert System"
+  report_version: "1.0"
+  
+  # Default targets (can be overridden at runtime)
+  default_target_customers: ["C123", "C789", "C456"]
+  default_target_wallets: ["0xabc", "0xdef", "0xghi"]
+  
+  # Analysis parameters
+  blockchain_networks: ["Bitcoin", "Ethereum"]
+  analysis_scope: "Customer asset tracing and claims reconciliation"
+  time_period: "2022-10-01 to 2022-11-30"
+
+# Error handling and fallback behaviors
+error_handling:
+  continue_on_tool_error: true
+  fallback_to_manual_analysis: false
+  require_human_validation: false
+  
+  # Specific error responses
+  missing_data_response: "insufficient_data"
+  network_error_response: "retry_with_delay"
+  validation_error_response: "regenerate_output"
+
+
